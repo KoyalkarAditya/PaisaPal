@@ -74,8 +74,8 @@ function ReceiveIcon() {
         fill="none"
         viewBox="0 0 24 24"
         stroke-width="1.5"
-        stroke="currentColor"
-        className="w-6 h-6"
+        stroke="#FFFFFF"
+        className="w-9 h-9  bg-[#6a51a6] rounded-lg"
       >
         <path
           stroke-linecap="round"
@@ -95,8 +95,8 @@ function SentIcon() {
         fill="none"
         viewBox="0 0 24 24"
         stroke-width="1.5"
-        stroke="currentColor"
-        className="w-6 h-6"
+        stroke="#FFFFFF"
+        className="w-9 h-9  bg-[#6a51a6] rounded-lg"
       >
         <path
           stroke-linecap="round"
