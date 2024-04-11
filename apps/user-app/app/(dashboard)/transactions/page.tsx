@@ -15,7 +15,14 @@ export default async function () {
   );
 }
 
-async function getP2PTransactions() {
+interface Transaction {
+  fromUser: number;
+  toUserId: number;
+  amount: number;
+  date: Date;
+}
+
+async function getP2PTransactions(): Promise<Transaction[]> {
   const session = await getServerSession(authOptions);
   const userId = Number(session?.user.id);
   const transactions = await prisma.p2pTransfer.findMany({
