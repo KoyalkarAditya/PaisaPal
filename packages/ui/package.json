@@ -6,7 +6,7 @@
     "./button": "./src/button.tsx",
     "./card": "./src/card.tsx",
     "./code": "./src/code.tsx",
-    "./appbar": "./src/Appbar.tsx",
+    "./appbar": "./src/AppBar.tsx",
     "./card": "./src/card.tsx",
     "./Select": "./src/Select.tsx",
     "./Center": "./src/Center.tsx",
