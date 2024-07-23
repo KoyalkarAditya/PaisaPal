@@ -1,34 +1,22 @@
 import express from "express";
 import db from "@repo/db/client";
+
 const app = express();
-import zod from "zod";
 app.use(express.json());
-const paymentSchema = zod.object({
-  token: zod.string(),
-  userId: zod.string(),
-  amount: zod.string(),
-});
+
 app.post("/hdfcWebhook", async (req, res) => {
-  const result = paymentSchema.safeParse(req.body);
-  if (!result.success) {
-    return res.json({
-      message: "Invalid credentials",
-    });
-  }
-  const paymentInformation: {
-    token: string;
-    userId: string;
-    amount: string;
-  } = {
+  const paymentInformation = {
     token: req.body.token,
-    userId: req.body.user_identifier,
-    amount: req.body.amount,
+    userId: parseInt(req.body.user_identifier),
+    amount: parseInt(req.body.amount),
   };
+
   const tsn = await db.onRampTransaction.findFirst({
     where: {
       token: paymentInformation.token,
     },
   });
+
   if (tsn?.status !== "Processing") {
     return res.json({
       message: "Request is already processed",
@@ -36,36 +24,55 @@ app.post("/hdfcWebhook", async (req, res) => {
   }
 
   try {
-    await db.$transaction([
-      db.balance.updateMany({
+    await db.$transaction(async (tx) => {
+      let balance = await tx.balance.findUnique({
         where: {
-          userId: Number(paymentInformation.userId),
+          userId: paymentInformation.userId,
         },
-        data: {
-          amount: {
-            increment: Number(paymentInformation.amount),
+      });
+
+      if (!balance) {
+        await tx.balance.create({
+          data: {
+            userId: paymentInformation.userId,
+            amount: paymentInformation.amount,
+            locked: 0,
           },
-        },
-      }),
-      db.onRampTransaction.updateMany({
+        });
+      } else {
+        await tx.balance.update({
+          where: {
+            userId: paymentInformation.userId,
+          },
+          data: {
+            amount: {
+              increment: paymentInformation.amount,
+            },
+          },
+        });
+      }
+
+      await tx.onRampTransaction.updateMany({
         where: {
           token: paymentInformation.token,
         },
         data: {
           status: "Success",
         },
-      }),
-    ]);
+      });
+    });
 
     res.json({
       message: "Captured",
     });
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error(error);
     res.status(411).json({
       message: "Error while processing webhook",
     });
   }
 });
 
-app.listen(3003);
+app.listen(3003, () => {
+  console.log("Server is running on port 3003");
+});

@@ -29,10 +29,10 @@ async function getP2PTransactions(): Promise<Transaction[]> {
     where: {
       OR: [
         {
-          fromUserId: userId,
+          fromUserId: Number(userId),
         },
         {
-          toUserId: userId,
+          toUserId: Number(userId),
         },
       ],
     },

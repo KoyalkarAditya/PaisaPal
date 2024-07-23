@@ -16,8 +16,10 @@ export async function p2pTransfer(to: string, amount: number) {
       number: to,
     },
   });
+  console.log(toUser?.id + "Hello");
 
   if (!toUser) {
+    alert("user not found");
     return {
       message: "User not found",
     };
