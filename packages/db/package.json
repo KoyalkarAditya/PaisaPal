@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^5.12.1"
+    "@prisma/client": "^5.19.0",
+    "prisma": "^5.19.0"
   },
   "exports": {
     "./client": "./index.ts"
