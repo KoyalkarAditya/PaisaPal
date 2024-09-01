@@ -22,6 +22,17 @@ export async function createRampTransaction(amount: number, provider: string) {
       provider,
     },
   });
+  await prisma.balance.update({
+    where: {
+      userId: Number(userId),
+    },
+    data: {
+      locked: {
+        increment: amount,
+      },
+    },
+  });
+  console.log("locked ");
   return {
     message: "OnRamp Transaction added",
   };
