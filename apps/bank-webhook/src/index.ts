@@ -25,33 +25,19 @@ app.post("/hdfcWebhook", async (req, res) => {
 
   try {
     await db.$transaction(async (tx) => {
-      let balance = await tx.balance.findUnique({
+      await tx.balance.update({
         where: {
           userId: paymentInformation.userId,
         },
+        data: {
+          amount: {
+            increment: paymentInformation.amount,
+          },
+          locked: {
+            decrement: paymentInformation.amount,
+          },
+        },
       });
-
-      if (!balance) {
-        await tx.balance.create({
-          data: {
-            userId: paymentInformation.userId,
-            amount: paymentInformation.amount,
-            locked: 0,
-          },
-        });
-      } else {
-        await tx.balance.update({
-          where: {
-            userId: paymentInformation.userId,
-          },
-          data: {
-            amount: {
-              increment: paymentInformation.amount,
-            },
-          },
-        });
-      }
-
       await tx.onRampTransaction.updateMany({
         where: {
           token: paymentInformation.token,
