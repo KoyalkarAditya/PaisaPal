@@ -24,10 +24,10 @@ jobs:
           context: .
           file: ./docker/Dockerfile.user
           push: true
-          tags: koyalkaraditya/week18:latest
+          tags: koyalkaraditya/paisapal:latest
 
       - name: Verify Pushed Image
-        run: docker pull koyalkaraditya/week18:latest
+        run: docker pull koyalkaraditya/paisapal:latest
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
