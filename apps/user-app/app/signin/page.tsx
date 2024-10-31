@@ -65,7 +65,7 @@ export default function () {
         <div className="flex justify-between  mt-5">
           <button
             onClick={handleSignIn}
-            className=" text-black border border-blue-500  px-6 text-white py-2 rounded-xl"
+            className=" text-black border border-blue-500  px-6 py-2 rounded-xl"
           >
             SignIn
           </button>
