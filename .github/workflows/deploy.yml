@@ -36,7 +36,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            sudo docker pull  koyalkaraditya/week18:latest
+            sudo docker pull  koyalkaraditya/paisapal:latest
             sudo docker stop web-app || true
             sudo docker rm web-app || true
             sudo docker run -d --name web-app -p 3005:3000  -e DATABASE_URL=${{secrets.DB_URL}} -e NEXTAUTH_URL=https://paisapal.adityakoyalkar.online koyalkaraditya/week18:latest
